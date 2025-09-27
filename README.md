@@ -1,8 +1,10 @@
 # Fraud Transaction Detector with n8n Workflow
+![alt text](/n8n_workflow.png)
 
 This project demonstrates a machine learning pipeline for real-time fraud detection, orchestrated through an n8n workflow. It was created to showcase the integration of a Python-based machine learning model with n8n for complex workflow automation.
 
 When a transaction is flagged as fraudulent, the n8n workflow calls the Gemini API to provide additional context or information about the nature of the fraud, enriching the final output.
+
 
 ## Project Workflow
 
