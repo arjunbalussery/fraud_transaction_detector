@@ -1,0 +1,350 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "predict",
+        "responseMode": "lastNode",
+        "responseData": "allEntries",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        -16
+      ],
+      "id": "4e4215dc-01b9-414f-bb85-b4c9bc582d2f",
+      "name": "Webhook",
+      "webhookId": "bba703bd-9a22-4bc2-a2ba-ba6db7a5b183",
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/predict",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "Time",
+              "value": "={{$json.body.Time}}"
+            },
+            {
+              "name": "V1",
+              "value": "={{$json.body.V1}}"
+            },
+            {
+              "name": "V2",
+              "value": "={{$json.body.V2}}"
+            },
+            {
+              "name": "V3",
+              "value": "={{$json.body.V3}}"
+            },
+            {
+              "name": "V4",
+              "value": "={{$json.body.V4}}"
+            },
+            {
+              "name": "V5",
+              "value": "={{$json.body.V5}}"
+            },
+            {
+              "name": "V6",
+              "value": "={{$json.body.V6}}"
+            },
+            {
+              "name": "V7",
+              "value": "={{$json.body.V7}}"
+            },
+            {
+              "name": "V8",
+              "value": "={{$json.body.V8}}"
+            },
+            {
+              "name": "V9",
+              "value": "={{$json.body.V9}}"
+            },
+            {
+              "name": "V10",
+              "value": "={{$json.body.V10}}"
+            },
+            {
+              "name": "V11",
+              "value": "={{$json.body.V11}}"
+            },
+            {
+              "name": "V12",
+              "value": "={{$json.body.V12}}"
+            },
+            {
+              "name": "V13",
+              "value": "={{$json.body.V13}}"
+            },
+            {
+              "name": "V14",
+              "value": "={{$json.body.V14}}"
+            },
+            {
+              "name": "V15",
+              "value": "={{$json.body.V15}}"
+            },
+            {
+              "name": "V16",
+              "value": "={{$json.body.V16}}"
+            },
+            {
+              "name": "V17",
+              "value": "={{$json.body.V17}}"
+            },
+            {
+              "name": "V18",
+              "value": "={{ $json.body.V18 }}"
+            },
+            {
+              "name": "V19",
+              "value": "={{ $json.body.V19 }}"
+            },
+            {
+              "name": "V20",
+              "value": "={{ $json.body.V20 }}"
+            },
+            {
+              "name": "V21",
+              "value": "={{ $json.body.V21 }}"
+            },
+            {
+              "name": "V22",
+              "value": "={{ $json.body.V22 }}"
+            },
+            {
+              "name": "V23",
+              "value": "={{ $json.body.V23 }}"
+            },
+            {
+              "name": "V24",
+              "value": "={{ $json.body.V24 }}"
+            },
+            {
+              "name": "V25",
+              "value": "={{ $json.body.V25 }}"
+            },
+            {
+              "name": "V26",
+              "value": "={{ $json.body.V26 }}"
+            },
+            {
+              "name": "V27",
+              "value": "={{ $json.body.V27 }}"
+            },
+            {
+              "name": "V28",
+              "value": "={{ $json.body.V28 }}"
+            },
+            {
+              "name": "Amount",
+              "value": "={{ $json.body.Amount }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -96,
+        -16
+      ],
+      "id": "63f27d3a-b09a-4e62-8266-e23f61257905",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b7c07835-b208-4e8c-9045-aeebe80b15b9",
+              "leftValue": "={{ $json.body.is_fraud }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "6595da58-8a1d-4ef8-b5d5-19a8725e22a2",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        112,
+        -16
+      ],
+      "id": "6162351c-a462-4767-b487-53cf27a010f1",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "explain about transaction fraud in 3 senetence",
+        "options": {
+          "systemMessage": "You are a helpful assistant"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        -32
+      ],
+      "id": "9cbc0266-61c8-4c2e-8685-d612995e0e72",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        400,
+        128
+      ],
+      "id": "b7f9b6b2-a90c-45fd-a674-28158f6ee8f5",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "<your_id>",
+          "name": "<Account>"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        272
+      ],
+      "id": "650b8456-4b35-4359-b1ee-f61bfa81f6bb",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        768,
+        -32
+      ],
+      "id": "0772de1b-8e41-4e71-9deb-e305858a5751",
+      "name": "No Operation, do nothing1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "755537bc-25ee-4e19-8126-5f776cf9424b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f7e1a048b389e33db0fa993967f1d64d35ebefdc2a452008f7e958a823be6505"
+  },
+  "id": "DhrOosAcVrEvt5rT",
+  "tags": []
+}
