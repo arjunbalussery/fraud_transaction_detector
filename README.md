@@ -21,15 +21,16 @@ The entire process is designed as an automated workflow:
 
 *   `main.py`: A FastAPI application that serves the machine learning model via REST endpoints.
 *   `stimulator.py`: A script to simulate real-time transactions and trigger the n8n workflow.
-*   `creditcard.csv`: The dataset used for training the fraud detection model.
+*   `creditcard.csv`: The dataset used for training the fraud detection model. **Note:** This file is not included in the repository. See the instructions below to download it.
 
 ## Getting Started
 
 ### Prerequisites
 
 *   Python 3.7+
+*   Docker
 *   An active n8n instance (cloud or self-hosted)
-*   Access to the Gemini API
+*   Access to the Gemini API (Optional)
 
 ### Installation
 
@@ -39,14 +40,40 @@ The entire process is designed as an automated workflow:
     cd fraud_transaction_detector
     ```
 
-2.  **Install the required packages:**
+2.  **Download the dataset:**
+    The `creditcard.csv` file is required but not included in this repository. You can download it from Kaggle:
+    [https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?resource=download](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud?resource=download)
+    Once downloaded, place the `creditcard.csv` file in the root of the project directory.
+
+3.  **Install the required packages:**
     ```bash
     pip install "fastapi[all]" scikit-learn pandas requests
     ```
 
 ## Running the Application & Workflow
 
-### 1. Start the FastAPI Server
+### 1. Set Up and Run n8n
+
+First, get your local n8n instance running using Docker.
+
+*   **Run the Docker command:**
+    ```bash
+    docker run -it --rm \
+     --name n8n \
+     -p 5678:5678 \
+     -e GENERIC_TIMEZONE="Europe/Berlin" \
+     -e TZ="Europe/Berlin" \
+     docker.n8n.io/n8nio/n8n
+    ```
+*   **Access n8n:**
+    Open your browser and navigate to `http://localhost:5678`.
+
+*   **Import the Workflow:**
+    Click the `+` icon to create a new workflow, then import the `My workflow.json` file from this repository.
+
+    **NOTE:** The workflow is configured to use the Gemini API. You may need to provide your own Gemini API key in the Gemini node. Alternatively, you can remove the Gemini node and connect the "If Fraud" branch to a "No Operation" node to receive the raw prediction result without enrichment.
+
+### 2. Start the FastAPI Server
 
 Run the API server from your terminal. This will host the `/train` and `/predict` endpoints.
 ```bash
@@ -54,21 +81,21 @@ uvicorn main:app --reload
 ```
 The API will be available at `http://127.0.0.1:8000`.
 
-### 2. Train the Model
+### 3. Train the Model
 
 Before making predictions, you must train the model by sending a `POST` request to the `/train` endpoint. This only needs to be done once after starting the server.
 ```bash
 curl -X POST http://127.0.0.1:8000/train
 ```
 
-### 3. Configure and Run the Simulator
+### 4. Configure and Run the Simulator
 
 The `stimulator.py` script kicks off the workflow. You must configure it to point to your n8n webhook.
 
 *   **Update `stimulator.py`** with your n8n Test Webhook URL:
     ```python
     # in stimulator.py
-    N8N_WEBHOOK_URL = "YOUR_N8N_WEBHOOK_TEST_URL"
+    N8N_WEBHOOK_URL = "http://localhost:5678/webhook/predict"
     ```
 
 *   **Run the script** from a new terminal:
